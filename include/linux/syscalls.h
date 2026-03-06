@@ -346,6 +346,11 @@ asmlinkage long sys_epoll_pwait(int epfd, struct epoll_event __user *events,
 				int maxevents, int timeout,
 				const sigset_t __user *sigmask,
 				size_t sigsetsize);
+asmlinkage long sys_epoll_pwait2(int epfd, struct epoll_event __user *events,
+				 int maxevents,
+				 const struct __kernel_timespec __user *timeout,
+				 const sigset_t __user *sigmask,
+				 size_t sigsetsize);
 
 /* fs/fcntl.c */
 asmlinkage long sys_dup(unsigned int fildes);
@@ -943,6 +948,8 @@ asmlinkage long sys_spu_create(const char __user *name,
 /* __ARCH_WANT_SYSCALL_NO_AT */
 asmlinkage long sys_open(const char __user *filename,
 				int flags, umode_t mode);
+asmlinkage long sys_close_range(unsigned int fd, unsigned int max_fd,
+				unsigned int flags);
 asmlinkage long sys_link(const char __user *oldname,
 				const char __user *newname);
 asmlinkage long sys_unlink(const char __user *pathname);
