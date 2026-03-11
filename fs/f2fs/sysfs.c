@@ -224,7 +224,6 @@ static ssize_t avg_vblocks_show(struct f2fs_attr *a,
 	f2fs_update_sit_info(sbi);
 	return sprintf(buf, "%llu\n", (unsigned long long)(si->avg_vblocks));
 }
-#endif
 
 static ssize_t __sbi_show_value(struct f2fs_attr *a,
 		struct f2fs_sb_info *sbi, char *buf,
@@ -245,6 +244,7 @@ static ssize_t __sbi_show_value(struct f2fs_attr *a,
 				"show sysfs node value with wrong type\n");
 	}
 }
+#endif
 
 static ssize_t f2fs_sbi_show(struct f2fs_attr *a,
 			struct f2fs_sb_info *sbi, char *buf)
@@ -277,6 +277,7 @@ static ssize_t f2fs_sbi_show(struct f2fs_attr *a,
 	}
 
 	return __sbi_show_value(a, sbi, buf, ptr + a->offset);
+}
 
 static void __sbi_store_value(struct f2fs_attr *a,
 			struct f2fs_sb_info *sbi,
@@ -297,7 +298,7 @@ static void __sbi_store_value(struct f2fs_attr *a,
 		break;
 	default:
 		f2fs_bug_on(sbi, 1);
-		f2fs_msg(sbi->sb, KERN_ERR, "store sysfs node value with wrong type");
+		f2fs_warn(sbi, "store sysfs node value with wrong type");
 	}
 }
 
@@ -532,7 +533,7 @@ static struct f2fs_attr f2fs_attr_##_name = {			\
 	.show	= _show,					\
 	.store	= _store,					\
 	.struct_type = _struct_type,				\
-	.offset = _offset					\
+	.offset = _offset,					\
 	.size = _size						\
 }
 
