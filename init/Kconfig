@@ -127,6 +127,14 @@ config BUILD_SALT
           this option will use the value in the calculation of the build id.
           This is mostly useful for distributions which want to ensure the
           build is unique between builds. It's safe to leave the default.
+config POLLY_CLANG
+       bool "Use Clang Polly optimizations"
+       depends on CC_IS_CLANG && $(cc-option,-mllvm -polly)
+       help
+         This option enables Clang's polyhedral loop optimizer known as
+         Polly. Polly is able to optimize various loops throughout the
+         kernel for cache locality. This requires a Clang toolchain
+         compiled with support for Polly.
 
 config HAVE_KERNEL_GZIP
 	bool
@@ -1251,7 +1259,7 @@ config CC_OPTIMIZE_FOR_PERFORMANCE
 	bool "Optimize for performance"
 	help
 	  This is the default optimization level for the kernel, building
-	  with the "-O2" compiler flag for best performance and most
+	  with the "-O3" compiler flag for best performance and most
 	  helpful compile-time warnings.
 
 config CC_OPTIMIZE_FOR_SIZE
