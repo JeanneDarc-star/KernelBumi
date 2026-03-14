@@ -598,6 +598,20 @@ static int tscpu_get_trip_temp
 	return 0;
 }
 
+static int tscpu_set_trip_temp(struct thermal_zone_device *thermal,
+                                int trip, int temp)
+{
+    if (trip < 0 || trip >= num_trip)
+        return -EINVAL;
+
+    /* Protect trip_point_0 — this is the HW protection point */
+    if (trip == 0)
+        return -EPERM;
+
+    trip_temp[trip] = temp;
+    return 0;
+}
+
 static int tscpu_get_crit_temp
 (struct thermal_zone_device *thermal, int *temperature)
 {
@@ -714,6 +728,7 @@ static struct thermal_zone_device_ops mtktscpu_dev_ops = {
 	.set_mode = tscpu_set_mode,
 	.get_trip_type = tscpu_get_trip_type,
 	.get_trip_temp = tscpu_get_trip_temp,
+	.set_trip_temp = tscpu_set_trip_temp,
 	.get_crit_temp = tscpu_get_crit_temp,
 };
 

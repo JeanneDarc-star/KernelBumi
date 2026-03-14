@@ -867,6 +867,19 @@ struct thermal_zone_device *thermal, int trip, int *temp)
 	return 0;
 }
 
+static int mtkts_bts_set_trip_temp(struct thermal_zone_device *thermal,
+				    int trip, int temp)
+{
+	if (trip < 0 || trip >= num_trip)
+		return -EINVAL;
+
+	if (trip == 0)
+		return -EPERM;
+
+	trip_temp[trip] = temp;
+	return 0;
+}
+
 static int mtkts_bts_get_crit_temp(
 struct thermal_zone_device *thermal, int *temperature)
 {
@@ -883,6 +896,7 @@ static struct thermal_zone_device_ops mtkts_BTS_dev_ops = {
 	.set_mode = mtkts_bts_set_mode,
 	.get_trip_type = mtkts_bts_get_trip_type,
 	.get_trip_temp = mtkts_bts_get_trip_temp,
+	.set_trip_temp = mtkts_bts_set_trip_temp,
 	.get_crit_temp = mtkts_bts_get_crit_temp,
 };
 
